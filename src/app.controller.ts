@@ -1,5 +1,5 @@
-import { ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import {
   Get,
   Body,
@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 
 import { AppService } from './app.service';
-import { PromptDto } from 'libs/common/dto';
+import { PromptDto, SpeechToTextDto } from 'libs/common/dto';
 import { AudioFileValidation } from 'libs/common/validations';
 
 @Controller()
@@ -30,8 +30,16 @@ export class AppController {
 
   @Post('speech-to-text')
   @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: SpeechToTextDto })
   @UseInterceptors(FileInterceptor('audio'))
-  speechToText(@UploadedFile(AudioFileValidation) file: Express.Multer.File) {
-    return this.appService.stt(file.buffer.toString('base64'), file.mimetype);
+  speechToText(
+    @Body() body: SpeechToTextDto,
+    @UploadedFile(AudioFileValidation) file: Express.Multer.File,
+  ) {
+    return this.appService.stt(
+      file.buffer.toString('base64'),
+      file.mimetype,
+      body.lang,
+    );
   }
 }

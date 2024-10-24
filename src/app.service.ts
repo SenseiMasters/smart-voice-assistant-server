@@ -2,6 +2,8 @@ import { ConfigService } from '@nestjs/config';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
+import { ValidLanguagesEnum } from 'libs/common/dto';
+
 @Injectable()
 export class AppService {
   constructor(private readonly configService: ConfigService) {}
@@ -23,6 +25,7 @@ export class AppService {
   public async stt(
     data: string,
     mimeType: string,
+    lang = ValidLanguagesEnum.FA,
   ): Promise<{ result: string }> {
     const geminiKey = this.configService.get<string>('GOOGLE_GEMINI_API_KEY');
     try {
@@ -38,7 +41,7 @@ export class AppService {
             data,
           },
         },
-        { text: 'Please write exact Farsi audio sentences for me' },
+        { text: `Please write exact ${lang} audio sentences for me` },
       ]);
       return { result: result.response.text() };
     } catch (error) {
