@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
+
+import { ValidLanguagesEnum } from './languages.dto';
 
 export enum ValidAudioEnum {
   WAV = 'audio/wav',
@@ -8,11 +10,6 @@ export enum ValidAudioEnum {
   AAC = 'audio/aac',
   OGG = 'audio/ogg',
   FLAC = 'audio/flac',
-}
-
-export enum ValidLanguagesEnum {
-  EN = 'English',
-  FA = 'Farsi',
 }
 
 export class SpeechToTextDto {

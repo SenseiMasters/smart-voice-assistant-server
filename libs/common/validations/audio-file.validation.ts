@@ -13,6 +13,7 @@ export class AudioFileValidation implements PipeTransform {
   constructor(private readonly configService: ConfigService) {}
 
   transform(value: Express.Multer.File, _metadata: ArgumentMetadata) {
+    if (!value) throw new BadRequestException('Audio file required');
     const maxFileSize =
       (this.configService.get<number>('MAX_AUDIO_SIZE') || 0) * Math.pow(10, 6);
     if (value.size > maxFileSize) {

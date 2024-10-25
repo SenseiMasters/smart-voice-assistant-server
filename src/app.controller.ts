@@ -25,7 +25,7 @@ export class AppController {
 
   @Post('prompt')
   prompt(@Body() body: PromptDto) {
-    return this.appService.prompt(body.input);
+    return this.appService.prompt(body.input, body.lang);
   }
 
   @Post('speech-to-text')

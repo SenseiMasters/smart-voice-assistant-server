@@ -17,6 +17,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, documentFactory);
 
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors();
 
   const port = Number(configService.get<number>('PORT') ?? 3030);
   await app.listen(port);

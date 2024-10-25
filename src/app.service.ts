@@ -8,12 +8,19 @@ import { ValidLanguagesEnum } from 'libs/common/dto';
 export class AppService {
   constructor(private readonly configService: ConfigService) {}
 
-  public async prompt(input: string): Promise<{ result: string }> {
+  public async prompt(
+    input: string,
+    lang = ValidLanguagesEnum.FA,
+  ): Promise<{ result: string }> {
     const geminiKey = this.configService.get<string>('GOOGLE_GEMINI_API_KEY');
     try {
       const genAI = new GoogleGenerativeAI(geminiKey);
       const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const result = await model.generateContent([input]);
+      const result = await model.generateContent([
+        input,
+        `Please write exact ${lang} sentences`,
+        'Please generate result in HTML markup for website',
+      ]);
       return { result: result.response.text() };
     } catch (error) {
       throw new InternalServerErrorException(
@@ -41,7 +48,7 @@ export class AppService {
             data,
           },
         },
-        { text: `Please write exact ${lang} audio sentences for me` },
+        { text: `Please write exact ${lang} sentences without timeline` },
       ]);
       return { result: result.response.text() };
     } catch (error) {
