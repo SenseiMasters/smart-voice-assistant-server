@@ -7,7 +7,6 @@ export class PromptDto {
   @ApiProperty({ type: String })
   @IsString()
   @IsNotEmpty()
-  @MinLength(20)
   input: string;
 
   @ApiProperty({ type: String, enum: ValidLanguagesEnum })
